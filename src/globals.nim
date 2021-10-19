@@ -30,7 +30,6 @@ type
     name*: array[30, char]     ## 0x023D
     pad_025B: array[233, char] ## 0x025B
     team*: int32               ## 0x0344
-    pad_0348: array[297, char] ## 0x0348
 
   Entity* = object
     address*: ByteAddress
