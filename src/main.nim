@@ -28,7 +28,7 @@ proc main =
   acBase = getModuleBase(acPid, "linux_64_client")
   overlay = initOverlay(target="AssaultCube")
   
-  let entList = readMem(acBase + Offsets.entList, int)
+  let entList = readMem(acBase + Offsets.entList, ByteAddress)
 
   while overlay.loop():
     if keyPressed(XK_End):
