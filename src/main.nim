@@ -2,22 +2,21 @@ import x11/keysym
 import render, mem, input, esp, globals
 
 template readMem(address: ByteAddress, t: untyped): untyped = readMem(acPid, address, t)
-template readString(address: ByteAddress): string = readString(acPid, address)
 
 proc createEntity(a: ByteAddress, vm: array[0..15, float32]): Entity =
+  var p = readMem(a, PlayerObject)
   result.address = a
-  result.headPos3D = readMem(a + Offsets.headPos, Vector3D)
+  result.headPos3D = p.headPos
   result.headPos3D.z += 0.6
-  result.feetPos3D = readMem(a + Offsets.feetPos, Vector3D)
-  result.health = readMem(a + Offsets.health, int32)
-  result.team = readMem(a + Offsets.team, int32)
-  result.state = readMem(a + Offsets.state, int8)
-  result.color = if result.team == 1: Basecolors.cyan else: Basecolors.red
-  result.name = readString(a + Offsets.name)
+  result.feetPos3D = p.feetPos
+  result.health = p.health
+  result.team = p.team
+  result.color = if p.team == 1: Basecolors.cyan else: Basecolors.red
+  result.name = $cast[cstring](p.name[0].unsafeAddr)
 
   try:
-    result.headPos2D = wts(overlay, vm, result.headPos3D)
-    result.feetPos2D = wts(overlay, vm, result.feetPos3D)
+    result.headPos2D = wts(overlay, vm, p.headPos)
+    result.feetPos2D = wts(overlay, vm, p.feetPos)
   except:
     result.health = -1
 

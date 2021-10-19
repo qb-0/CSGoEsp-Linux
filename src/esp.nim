@@ -57,12 +57,7 @@ proc renderSnapline*(self: Entity, midX: int) =
   )
 
 proc renderName*(self: Entity) =
-  var
-    head = self.headPos2D.y - self.feetPos2D.y
-    width = head / 2
-    center = width / -2
-  
   renderString(
-    self.headPos2D.x - center, self.headPos2D.y,
-    self.name, BaseColors.white
+    self.headPos2D.x, self.headPos2D.y + 20,
+    self.name, BaseColors.white, true
   )

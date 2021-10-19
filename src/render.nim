@@ -351,9 +351,14 @@ proc valueBar*(x1, y1, x2, y2, width, maxValue, value: float, vertical: bool = t
   else:
     line(x1, y1, barX, y2, width, color)
 
-proc renderString*(x, y: float, text: string, color: array[0..2, float32]) =
+proc renderString*(x, y: float, text: string, color: array[0..2, float32], align: bool = false) =
   glColor3f(color[0], color[1], color[2])
-  glRasterPos2f(x, y)
+
+  if align:
+    glRasterPos2f(x - (glutBitmapLength(GLUT_BITMAP_HELVETICA_12, text).float / 2), y)
+  else:
+    glRasterPos2f(x, y)
+
   for c in text:
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, ord(c))
 
