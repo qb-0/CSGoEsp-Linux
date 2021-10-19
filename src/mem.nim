@@ -11,7 +11,6 @@ proc getPid*(name: string): int =
       let proc_name = readFile(fmt"/proc/{pid}/cmdline").rsplit("/")[^1]
       if name in proc_name:
         return pid
-
   raise newException(IOError, fmt"Process not found ({name})")
 
 proc getModuleBase*(pid: int, moduleName: string): int =
