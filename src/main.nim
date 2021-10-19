@@ -1,4 +1,4 @@
-import x11/keysym
+import posix, x11/keysym
 import render, mem, input, esp, globals
 
 template readMem(address: ByteAddress, t: untyped): untyped = readMem(acPid, address, t)
@@ -21,6 +21,9 @@ proc createEntity(a: ByteAddress, vm: array[0..15, float32]): Entity =
     result.health = -1
 
 proc main =
+  if getuid() != 0:
+    quit("Root required!")
+
   acPid = getPid("assaultcube")
   acBase = getModuleBase(acPid, "linux_64_client")
   overlay = initOverlay(target="AssaultCube")
@@ -32,7 +35,7 @@ proc main =
       overlay.close()
 
     let viewMatrix = readMem(acBase + Offsets.viewMatrix, array[0..15, float32])
-    for e in 0..32 - 1:
+    for e in 0..31:
       let ent = createEntity(readMem(entList + e * 8, ByteAddress), viewMatrix)
 
       if ent.health > 0 and ent.health < 101:
