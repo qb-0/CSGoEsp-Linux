@@ -1,40 +1,36 @@
 import render
 
 var 
-  acPid*, acBase*: int
+  csPid*, clientBase*: int
   overlay*: Overlay
 
 const Offsets* = (
-  # Modulebase +
-  localPlayer: 0x12E328,
-  entList: 0x12E330,
-  viewMatrix: 0x13D3DC,
+  dwLocalPlayer: 0x22b25f0,
+  dwEntityList: 0x22e2a48,
+  dwViewMatrix: 0x22b6a64,
+
+  m_nForceBone: 0x2c54,
+  m_vecOrigin: 0x170,
+  m_bDormant: 0x125,
+  m_angRotation: 0x164,
+  m_iHealth: 0x138,
+  m_iTeamNum: 0x12c,
+  m_iName: 0x18c,
 )
 
 const BaseColors* = (
   white: color("white"),
   black: color("black"),
   cyan: color("cyan"),
-  red: color("red")
+  red: color("red"),
+  orange: color("orange"),
 )
 
 type
-  PlayerObject* {.bycopy.} = object
-    pad_0000: array[8, char]   ## 0x0000
-    headPos*: Vector3D         ## 0x0008
-    pad_0014: array[36, char]  ## 0x0014
-    feetPos*: Vector3D         ## 0x0038
-    pad_0044: array[204, char] ## 0x0044
-    health*: int32             ## 0x0110
-    pad_0114: array[297, char] ## 0x0114
-    name*: array[30, char]     ## 0x023D
-    pad_025B: array[233, char] ## 0x025B
-    team*: int32               ## 0x0344
-
   Entity* = object
     address*: ByteAddress
-    headPos3D*, feetPos3D*: Vector3D
-    headPos2D*, feetPos2D*: Vector2D
+    dormant*: bool
+    hPos3D*, pos3D*: Vector3D
+    hPos2D*, pos2D*: Vector2D
     health*, team*: int32
     color*: array[0..2, float32]
-    name*: string

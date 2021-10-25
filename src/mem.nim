@@ -17,6 +17,7 @@ proc getModuleBase*(pid: int, moduleName: string): int =
   for l in lines(fmt"/proc/{pid}/maps"):
     if moduleName in l:
       return parseHexInt(l.split("-")[0])
+  raise newException(IOError, fmt"Module not found ({moduleName})")
 
 proc readMem*(pid: int, address: ByteAddress, t: typedesc): t =
   var
