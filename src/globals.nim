@@ -15,7 +15,6 @@ const Offsets* = (
   m_angRotation: 0x164,
   m_iHealth: 0x138,
   m_iTeamNum: 0x12c,
-  m_iName: 0x18c,
 )
 
 const BaseColors* = (
