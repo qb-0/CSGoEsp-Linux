@@ -5,7 +5,6 @@ import opengl/glut
 type
   Overlay* = object
     width*, height*, midX*, midY*: int32
-    hwnd*: int
     videoMode*: ptr GLFWVidMode
     window*: GLFWWindow
 
