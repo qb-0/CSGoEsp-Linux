@@ -371,4 +371,3 @@ proc color*(color: string): array[0..2, float32] =
     [c.r.float32, c.g.float32, c.b.float32]
   except:
     [0.float32, 0, 0]
-
