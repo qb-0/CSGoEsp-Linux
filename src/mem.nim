@@ -34,7 +34,7 @@ proc readString*(pid: int, address: ByteAddress): string =
   let b = readMem(pid, address, array[0..100, char])
   result = $cast[cstring](b[0].unsafeAddr)
 
-proc writeMem*(pid: int, address: ByteAddress, data: any): int {.discardable.} =
+proc writeMem*(pid: int, address: ByteAddress, data: auto): int {.discardable.} =
   var
     iosrc, iodst: IOVec
     size = cast[csize_t](sizeof(data))
