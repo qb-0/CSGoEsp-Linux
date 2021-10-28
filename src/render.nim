@@ -5,6 +5,7 @@ import opengl/glut
 type
   Overlay* = object
     width*, height*, midX*, midY*: int32
+    x*, y*: int32
     videoMode*: ptr GLFWVidMode
     window*: GLFWWindow
 
@@ -16,7 +17,7 @@ type
     x*, y*, z*, w*: float32
 
   WinInfo = tuple
-    upperX, upperY, width, height: int32
+    x, y, width, height: int32
 
 #[
   vector
@@ -161,9 +162,9 @@ proc getWindowInfo(name: string): WinInfo =
   if exitCode != 1:
     for i in lines:
       if "te upper-left X:" in i:
-        result.upperX = parseI
+        result.x = parseI
       elif "te upper-left Y:" in i:
-        result.upperY = parseI
+        result.y = parseI
       elif "Width:" in i:
         result.width = parseI
       elif "Height:" in i:
@@ -189,10 +190,14 @@ proc initOverlay*(name: string = "Overlay", target: string = "Fullscreen"): Over
     result.height = result.videoMode.height - 1
     result.midX = result.videoMode.width div 2
     result.midY = result.videoMode.height div 2
+    result.x = 0
+    result.y = 0
   else:
     wInfo = getWindowInfo(target)
     result.width = wInfo.width
     result.height = wInfo.height
+    result.x = wInfo.x
+    result.y = wInfo.y
     result.midX = result.width div 2
     result.midY = result.height div 2
 
@@ -212,7 +217,7 @@ proc initOverlay*(name: string = "Overlay", target: string = "Fullscreen"): Over
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
   if target != "Fullscreen":
-    result.window.setWindowPos(wInfo.upperX, wInfo.upperY)
+    result.window.setWindowPos(wInfo.x, wInfo.y)
 
 proc update*(self: Overlay) =
   self.window.swapBuffers()
