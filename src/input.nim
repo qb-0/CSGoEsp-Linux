@@ -1,4 +1,5 @@
 import x11/xlib
+include x11/keysym
 
 var 
   display = XOpenDisplay(nil)

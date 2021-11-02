@@ -1,4 +1,4 @@
-import posix, x11/keysym
+import posix
 import render, mem, input, globals, esp
 
 template readMem(address: ByteAddress, t: untyped): untyped = readMem(csPid, address, t)
