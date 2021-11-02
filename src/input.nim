@@ -7,5 +7,5 @@ var
 
 proc keyPressed*(key: culong): bool =
   discard XQueryKeymap(display, keyMap)
-  var triggerKeyCode = XKeysymToKeycode(display, key)
-  ord(keyMap[triggerKeyCode.uint div 8]) != 0 and (1 shl (triggerKeyCode.uint mod 8)) > 0
+  let triggerKeyCode = XKeysymToKeycode(display, key)
+  ord(keyMap[triggerKeyCode.int shr 3]) != 0 and (1 shl (triggerKeyCode.int and 7)) > 0
