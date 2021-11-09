@@ -1,10 +1,11 @@
 import posix
-import render, mem, input, globals, esp
+import render, mem, input, globals, esp, triggerbot
 
 template readMem(address: ByteAddress, t: untyped): untyped = readMem(csPid, address, t)
 
 proc initEntity(address: ByteAddress, e: ptr Entity, vm: array[0..15, float32]): bool {.discardable.} =
   e.address = address
+  e.crossId = readMem(address + Offsets.m_iCrosshairId, int32)
   e.dormant = readMem(address + Offsets.m_bDormant, bool)
   if e.dormant: 
     return
@@ -21,6 +22,7 @@ proc initEntity(address: ByteAddress, e: ptr Entity, vm: array[0..15, float32]):
   if not wts(overlay, vm, e.hPos3D, e.hPos2D.addr): 
     return
   e.team = readMem(address + Offsets.m_iTeamNum, int32)
+  e.id = readMem(address + Offsets.m_iD, int32)
   e.color = if e.team == 2: BaseColors.orange else: BaseColors.cyan
   result = true
 
@@ -54,6 +56,8 @@ proc main =
             ent.renderHealth()
             ent.renderSnapline(overlay.midX)
             ent.renderDistance(localEnt)
+            localEnt.checkTrigger(ent)
+
 
   overlay.deinit()
 
