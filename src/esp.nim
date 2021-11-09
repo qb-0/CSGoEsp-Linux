@@ -1,9 +1,9 @@
 import render, globals
 
-proc wts*(a: Overlay, matrix: array[0..15, float32], pos: Vector3D, pos2d: ptr Vector2D): bool =
+proc wts*(a: Overlay, matrix: array[0..15, float32], pos: Vec3, pos2d: ptr Vec2): bool =
   var 
-    clip: Vector3D
-    ndc: Vector2D
+    clip: Vec3
+    ndc: Vec2
 
   # z = w
   clip.z = pos.x * matrix[12] + pos.y * matrix[13] + pos.z * matrix[14] + matrix[15]

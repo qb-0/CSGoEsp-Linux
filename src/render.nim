@@ -9,12 +9,10 @@ type
     videoMode*: ptr GLFWVidMode
     window*: GLFWWindow
 
-  Vector2D* = object
+  Vec2* = object
     x*, y*: float32
-  Vector3D* = object
+  Vec3* = object
     x*, y*, z*: float32
-  Vector4D* = object
-    x*, y*, z*, w*: float32
 
   WinInfo = tuple
     x, y, width, height: int32
@@ -23,128 +21,128 @@ type
   vector
 ]#
 
-proc Vector*(x: float32, y: float32): Vector2D =
-  Vector2D(x: x, y: y)
-proc Vector*(x: float32, y: float32, z: float32): Vector3D =
-  Vector3D(x: x, y: y, z: z)
+proc Vector*(x: float32, y: float32): Vec2 =
+  Vec2(x: x, y: y)
+proc Vector*(x: float32, y: float32, z: float32): Vec3 =
+  Vec3(x: x, y: y, z: z)
 
-proc `+`*(self: Vector2D, v: Vector2D): Vector2D =
-  Vector2D(x: self.x + v.x, y: self.y + v.y)
-proc `+`*(self: Vector3D, v: Vector3D): Vector3D =
-  Vector3D(x: self.x + v.x, y: self.y + v.y, z: self.z + v.z)
-proc `+`*(self: Vector2D, v: float32): Vector2D =
-  Vector2D(x: self.x + v, y: self.y + v)
-proc `+`*(self: Vector3D, v: float32): Vector3D =
-  Vector3D(x: self.x + v, y: self.y + v, z: self.z + v)
+proc `+`*(self: Vec2, v: Vec2): Vec2 =
+  Vec2(x: self.x + v.x, y: self.y + v.y)
+proc `+`*(self: Vec3, v: Vec3): Vec3 =
+  Vec3(x: self.x + v.x, y: self.y + v.y, z: self.z + v.z)
+proc `+`*(self: Vec2, v: float32): Vec2 =
+  Vec2(x: self.x + v, y: self.y + v)
+proc `+`*(self: Vec3, v: float32): Vec3 =
+  Vec3(x: self.x + v, y: self.y + v, z: self.z + v)
 
-proc `+=`*(self: var Vector2D, v: float32) =
+proc `+=`*(self: var Vec2, v: float32) =
   self.x = self.x + v
   self.y = self.y + v
-proc `+=`*(self: var Vector3D, v: float32) =
+proc `+=`*(self: var Vec3, v: float32) =
   self.x = self.x + v
   self.y = self.y + v
   self.z = self.z + v
-proc `+=`*(self: var Vector2D, v: Vector2D) =
+proc `+=`*(self: var Vec2, v: Vec2) =
   self.x = self.x + v.x
   self.y = self.y + v.y
-proc `+=`*(self: var Vector3D, v: Vector3D) =
+proc `+=`*(self: var Vec3, v: Vec3) =
   self.x = self.x + v.x
   self.y = self.y + v.y
   self.z = self.z + v.z
 
-proc `-`*(self: Vector2D, v: Vector2D): Vector2D =
-  Vector2D(x: self.x - v.x, y: self.y - v.y)
-proc `-`*(self: Vector3D, v: Vector3D): Vector3D =
-  Vector3D(x: self.x - v.x, y: self.y - v.y, z: self.z - v.z)
-proc `-`*(self: Vector2D, v: float32): Vector2D =
-  Vector2D(x: self.x - v, y: self.y - v)
-proc `-`*(self: Vector3D, v: float32): Vector3D =
-  Vector3D(x: self.x - v, y: self.y - v, z: self.z - v)
+proc `-`*(self: Vec2, v: Vec2): Vec2 =
+  Vec2(x: self.x - v.x, y: self.y - v.y)
+proc `-`*(self: Vec3, v: Vec3): Vec3 =
+  Vec3(x: self.x - v.x, y: self.y - v.y, z: self.z - v.z)
+proc `-`*(self: Vec2, v: float32): Vec2 =
+  Vec2(x: self.x - v, y: self.y - v)
+proc `-`*(self: Vec3, v: float32): Vec3 =
+  Vec3(x: self.x - v, y: self.y - v, z: self.z - v)
 
-proc `-=`*(self: var Vector2D, v: float32) =
+proc `-=`*(self: var Vec2, v: float32) =
   self.x = self.x - v
   self.y = self.y - v
-proc `-=`*(self: var Vector3D, v: float32) =
+proc `-=`*(self: var Vec3, v: float32) =
   self.x = self.x - v
   self.y = self.y - v
   self.z = self.z - v
-proc `-=`*(self: var Vector2D, v: Vector2D) =
+proc `-=`*(self: var Vec2, v: Vec2) =
   self.x = self.x - v.x
   self.y = self.y - v.y
-proc `-=`*(self: var Vector3D, v: Vector3D) =
+proc `-=`*(self: var Vec3, v: Vec3) =
   self.x = self.x - v.x
   self.y = self.y - v.y
   self.z = self.z - v.z
 
-proc `*`*(self: Vector2D, v: Vector2D): Vector2D =
-  Vector2D(x: self.x * v.x, y: self.y * v.y)
-proc `*`*(self: Vector3D, v: Vector3D): Vector3D =
-  Vector3D(x: self.x * v.x, y: self.y * v.y, z: self.z * v.z)
-proc `*`*(self: Vector2D, v: float32): Vector2D =
-  Vector2D(x: self.x * v, y: self.y * v)
-proc `*`*(self: Vector3D, v: float32): Vector3D =
-  Vector3D(x: self.x * v, y: self.y * v, z: self.z * v)
+proc `*`*(self: Vec2, v: Vec2): Vec2 =
+  Vec2(x: self.x * v.x, y: self.y * v.y)
+proc `*`*(self: Vec3, v: Vec3): Vec3 =
+  Vec3(x: self.x * v.x, y: self.y * v.y, z: self.z * v.z)
+proc `*`*(self: Vec2, v: float32): Vec2 =
+  Vec2(x: self.x * v, y: self.y * v)
+proc `*`*(self: Vec3, v: float32): Vec3 =
+  Vec3(x: self.x * v, y: self.y * v, z: self.z * v)
 
-proc `*=`*(self: var Vector2D, v: float32) =
+proc `*=`*(self: var Vec2, v: float32) =
   self.x = self.x * v
   self.y = self.y * v
-proc `*=`*(self: var Vector3D, v: float32) =
+proc `*=`*(self: var Vec3, v: float32) =
   self.x = self.x * v
   self.y = self.y * v
   self.z = self.z * v
-proc `*=`*(self: var Vector2D, v: Vector2D) =
+proc `*=`*(self: var Vec2, v: Vec2) =
   self.x = self.x * v.x
   self.y = self.y * v.y
-proc `*=`*(self: var Vector3D, v: Vector3D) =
+proc `*=`*(self: var Vec3, v: Vec3) =
   self.x = self.x * v.x
   self.y = self.y * v.y
   self.z = self.z * v.z
 
-proc `/`*(self: Vector2D, v: Vector2D): Vector2D =
-  Vector2D(x: self.x / v.x, y: self.y / v.y)
-proc `/`*(self: Vector3D, v: Vector3D): Vector3D =
-  Vector3D(x: self.x / v.x, y: self.y / v.y, z: self.z / v.z)
-proc `/`*(self: Vector2D, v: float32): Vector2D =
-  Vector2D(x: self.x / v, y: self.y / v)
-proc `/`*(self: Vector3D, v: float32): Vector3D =
-  Vector3D(x: self.x / v, y: self.y / v, z: self.z / v)
+proc `/`*(self: Vec2, v: Vec2): Vec2 =
+  Vec2(x: self.x / v.x, y: self.y / v.y)
+proc `/`*(self: Vec3, v: Vec3): Vec3 =
+  Vec3(x: self.x / v.x, y: self.y / v.y, z: self.z / v.z)
+proc `/`*(self: Vec2, v: float32): Vec2 =
+  Vec2(x: self.x / v, y: self.y / v)
+proc `/`*(self: Vec3, v: float32): Vec3 =
+  Vec3(x: self.x / v, y: self.y / v, z: self.z / v)
 
-proc `/=`*(self: var Vector2D, v: float32) =
+proc `/=`*(self: var Vec2, v: float32) =
   self.x = self.x / v
   self.y = self.y / v
-proc `/=`*(self: var Vector3D, v: float32) =
+proc `/=`*(self: var Vec3, v: float32) =
   self.x = self.x / v
   self.y = self.y / v
   self.z = self.z / v
-proc `/=`*(self: var Vector2D, v: Vector2D) =
+proc `/=`*(self: var Vec2, v: Vec2) =
   self.x = self.x / v.x
   self.y = self.y / v.y
-proc `/=`*(self: var Vector3D, v: Vector3D) =
+proc `/=`*(self: var Vec3, v: Vec3) =
   self.x = self.x / v.x
   self.y = self.y / v.y
   self.z = self.z / v.z
 
-proc magSq*(self: Vector2D): float32 =
+proc magSq*(self: Vec2): float32 =
   (self.x * self.x) + (self.y * self.y)
-proc magSq*(self: Vector3D): float32 =
+proc magSq*(self: Vec3): float32 =
   (self.x * self.x) + (self.y * self.y) + (self.z * self.z)
 
-proc mag*(self: Vector2D): float32 =
+proc mag*(self: Vec2): float32 =
   sqrt(self.magSq())
-proc mag*(self: Vector3D): float32 =
+proc mag*(self: Vec3): float32 =
   sqrt(self.magSq())
 
-proc dist*(self: Vector2D, v: Vector2D): float32 =
+proc dist*(self: Vec2, v: Vec2): float32 =
   mag(self - v)
-proc dist*(self: Vector3D, v: Vector3D): float32 =
+proc dist*(self: Vec3, v: Vec3): float32 =
   mag(self - v)
 
-proc normalize*(self: var Vector2D) =
+proc normalize*(self: var Vec2) =
   self /= self.mag()
-proc normalize*(self: var Vector3D) =
+proc normalize*(self: var Vec3) =
   self /= self.mag()
 
-proc perpendicular*(self: Vector2D): Vector2D =
+proc perpendicular*(self: Vec2): Vec2 =
   result.x = -self.y
   result.y = self.x
 

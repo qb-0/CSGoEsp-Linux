@@ -11,7 +11,7 @@ proc initEntity(address: ByteAddress, e: ptr Entity, vm: array[0..15, float32]):
   e.health = readMem(address + Offsets.m_iHealth, int32)
   if e.health <= 0:
     return
-  e.pos3D = readMem(address + Offsets.m_vecOrigin, Vector3D)
+  e.pos3D = readMem(address + Offsets.m_vecOrigin, Vec3)
   if not wts(overlay, vm, e.pos3D, e.pos2D.addr): 
     return
   let dwBoneMatrix = readMem(address + Offsets.m_nForceBone + 0x2C, int)

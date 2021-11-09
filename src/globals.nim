@@ -29,7 +29,7 @@ type
   Entity* = object
     address*: ByteAddress
     dormant*: bool
-    hPos3D*, pos3D*: Vector3D
-    hPos2D*, pos2D*: Vector2D
+    hPos3D*, pos3D*: Vec3
+    hPos2D*, pos2D*: Vec2
     health*, team*: int32
     color*: array[0..2, float32]
