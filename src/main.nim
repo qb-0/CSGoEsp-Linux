@@ -1,4 +1,4 @@
-import posix, osproc
+import posix
 import render, mem, input, globals, esp, triggerbot
 
 template readMem(address: ByteAddress, t: untyped): untyped = readMem(csPid, address, t)
@@ -55,7 +55,7 @@ proc mainLoop =
 
 proc initHack =
   if getuid() != 0:
-    discard execCmd("sudo -v")
+    quit("Root required!")
 
   try:
     csPid = getPid("csgo_linux64")
