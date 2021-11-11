@@ -3,7 +3,7 @@ include x11/keysym
 
 var display = XOpenDisplay(nil)
 
-proc keyPressed*(key: culong): bool =
+proc keyPressed*(key: KeySym): bool =
   var keys: array[0..31, char]
   discard XQueryKeymap(display, keys)
   let keycode = XKeysymToKeycode(display, key)
