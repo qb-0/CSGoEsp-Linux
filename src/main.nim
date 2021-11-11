@@ -1,4 +1,4 @@
-import posix
+import os, posix, osproc
 import render, mem, input, globals, esp, triggerbot
 
 template readMem(address: ByteAddress, t: untyped): untyped = readMem(csPid, address, t)
@@ -28,11 +28,15 @@ proc initEntity(address: ByteAddress, e: ptr Entity, vm: array[0..15, float32]):
 
 proc main =
   if getuid() != 0:
-    quit("Root required!")
+    discard execCmd("sudo -v")
 
-  csPid = getPid("csgo_linux64")
-  clientBase = getModuleBase(csPid, "client_client.so")
-  overlay = initOverlay(target="Counter-Strike: Global Offensive - OpenGL")
+  try:
+    csPid = getPid("csgo_linux64")
+    clientBase = getModuleBase(csPid, "client_client.so")
+    overlay = initOverlay(target="Counter-Strike: Global Offensive - OpenGL")
+  except:
+    echo getCurrentExceptionMsg()
+    quit(QuitFailure)
   
   while overlay.loop():
     if keyPressed(XK_End):
