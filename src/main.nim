@@ -1,4 +1,4 @@
-import os, posix, osproc
+import posix, osproc
 import render, mem, input, globals, esp, triggerbot
 
 template readMem(address: ByteAddress, t: untyped): untyped = readMem(csPid, address, t)
