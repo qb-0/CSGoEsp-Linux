@@ -26,18 +26,7 @@ proc initEntity(address: ByteAddress, e: ptr Entity, vm: array[0..15, float32]):
   e.color = if e.team == 2: BaseColors.orange else: BaseColors.cyan
   result = true
 
-proc main =
-  if getuid() != 0:
-    discard execCmd("sudo -v")
-
-  try:
-    csPid = getPid("csgo_linux64")
-    clientBase = getModuleBase(csPid, "client_client.so")
-    overlay = initOverlay(target="Counter-Strike: Global Offensive - OpenGL")
-  except:
-    echo getCurrentExceptionMsg()
-    quit(QuitFailure)
-  
+proc mainLoop =
   while overlay.loop():
     if keyPressed(XK_End):
       overlay.close()
@@ -62,8 +51,21 @@ proc main =
             ent.renderDistance(localEnt)
             localEnt.checkTrigger(ent)
 
-
   overlay.deinit()
 
+proc initHack =
+  if getuid() != 0:
+    discard execCmd("sudo -v")
+
+  try:
+    csPid = getPid("csgo_linux64")
+    clientBase = getModuleBase(csPid, "client_client.so")
+    overlay = initOverlay(target="Counter-Strike: Global Offensive - OpenGL")
+  except:
+    echo getCurrentExceptionMsg()
+    quit(QuitFailure)
+
+  mainLoop()
+
 when isMainModule:
-  main()
+  initHack()
