@@ -5,9 +5,9 @@ var
   overlay*: Overlay
 
 const Offsets* = (
-  dwLocalPlayer: 0x22b25f0,
-  dwEntityList: 0x22e2a48,
-  dwViewMatrix: 0x22b6a64,
+  dwLocalPlayer: 0x22b35f0,
+  dwEntityList: 0x22e3a48,
+  dwViewMatrix: 0x22b7a64,
 
   m_iD: 0x94,
   m_iCrosshairId: 0x12188,

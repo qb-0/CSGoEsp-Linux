@@ -1,4 +1,4 @@
-import x11/[xlib, xtst]
+import os, x11/[xlib, xtst]
 include x11/keysym
 
 var display = XOpenDisplay(nil)
@@ -12,5 +12,6 @@ proc keyPressed*(key: KeySym): bool =
 proc clickMouse* =
   discard XTestFakeButtonEvent(display, 1, 1, 0)
   discard XFlush(display)
+  sleep(2)
   discard XTestFakeButtonEvent(display, 1, 0, 0)
   discard XFlush(display)
