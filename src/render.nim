@@ -11,11 +11,34 @@ type
 
   Vec2* = object
     x*, y*: float32
+
   Vec3* = object
     x*, y*, z*: float32
 
+  Rgb* = tuple
+    r, g, b: float32
+
   WinInfo = tuple
     x, y, width, height: int32
+
+
+#[
+  misc
+]#
+
+proc newRgb*(r, g, b: float32): Rgb =
+  result.r = r
+  result.g = g
+  result.b = b
+
+proc color*(color: string): Rgb =
+  try:
+    var c = parseColor(color).extractRGB()
+    result.r = c.r.float32
+    result.g = c.g.float32
+    result.b = c.b.float32
+  except:
+    result = newRgb(0, 0, 0)
 
 #[
   vector
@@ -237,22 +260,22 @@ proc loop*(self: Overlay): bool =
   2d drawings
 ]#
 
-proc box*(x, y, width, height, lineWidth: float, color: array[0..2, float32]) =
+proc box*(x, y, width, height, lineWidth: float, color: Rgb) =
   glLineWidth(lineWidth)
   glBegin(GL_LINE_LOOP)
-  glColor3f(color[0], color[1], color[2])
+  glColor3f(color.r, color.g, color.b)
   glVertex2f(x, y)
   glVertex2f(x + width, y)
   glVertex2f(x + width, y + height)
   glVertex2f(x, y + height)
   glEnd()
 
-proc alphaBox*(x, y, width, height: float, color, outlineColor: array[0..2, float32], alpha: float) =
+proc alphaBox*(x, y, width, height: float, color, outlineColor: Rgb, alpha: float) =
   box(x, y, width, height, 1.0, outlineColor)
   glEnable(GL_BLEND)
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
   glBegin(GL_POLYGON)
-  glColor4f(color[0], color[1], color[2], alpha)
+  glColor4f(color.r.float, color.g.float, color.b.float, alpha)
   glVertex2f(x, y)
   glVertex2f(x + width, y)
   glVertex2f(x + width, y + height)
@@ -260,7 +283,7 @@ proc alphaBox*(x, y, width, height: float, color, outlineColor: array[0..2, floa
   glEnd()
   glDisable(GL_BLEND)
 
-proc cornerBox*(x, y, width, height: float, color, outlineColor: array[0..2, float32], lineWidth: float = 1) =
+proc cornerBox*(x, y, width, height: float, color, outlineColor: Rgb, lineWidth: float = 1) =
   template drawCorner =
     glBegin(GL_LINES)
     # Lower Left
@@ -285,21 +308,21 @@ proc cornerBox*(x, y, width, height: float, color, outlineColor: array[0..2, flo
     lineH = height / 3
 
   glLineWidth(lineWidth + 2)
-  glColor3f(outlineColor[0], outlineColor[1], outlineColor[2])
+  glColor3f(outlineColor.r, outlineColor.g, outlineColor.b)
   drawCorner()
   glLineWidth(lineWidth)
-  glColor3f(color[0], color[1], color[2])
+  glColor3f(color.r, color.g, color.b)
   drawCorner()
 
-proc line*(x1, y1, x2, y2, lineWidth: float, color: array[0..2, float32]) =
+proc line*(x1, y1, x2, y2, lineWidth: float, color: Rgb) =
   glLineWidth(lineWidth)
   glBegin(GL_LINES)
-  glColor3f(color[0], color[1], color[2])
+  glColor3f(color.r, color.g, color.b)
   glVertex2f(x1, y1)
   glVertex2f(x2, y2)
   glEnd()
 
-proc dashedLine*(x1, y1, x2, y2, lineWidth: float, color: array[0..2, float32], factor: int32 = 2, pattern: string = "11111110000", alpha: float32 = 0.5) =
+proc dashedLine*(x1, y1, x2, y2, lineWidth: float, color: Rgb, factor: int32 = 2, pattern: string = "11111110000", alpha: float32 = 0.5) =
   glPushAttrib(GL_ENABLE_BIT)
   glLineStipple(factor, fromBin[uint16](pattern))
   glLineWidth(lineWidth)
@@ -308,17 +331,17 @@ proc dashedLine*(x1, y1, x2, y2, lineWidth: float, color: array[0..2, float32], 
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
   glBegin(GL_LINES)
-  glColor4f(color[0], color[1], color[2], alpha)
+  glColor4f(color.r.float, color.g.float, color.b.float, alpha)
   glVertex2f(x1, y1)
   glVertex2f(x2, y2)
   glEnd()
   glPopAttrib()
 
-proc circle*(x, y, radius: float, color: array[0..2, float32], filled: bool = true) =
+proc circle*(x, y, radius: float, color: Rgb, filled: bool = true) =
   if filled: glBegin(GL_POLYGON)
   else: glBegin(GL_LINE_LOOP)
 
-  glColor3f(color[0], color[1], color[2])
+  glColor3f(color.r, color.g, color.b)
   for i in 0..<360:
     glVertex2f(
       cos(degToRad(i.float32)) * radius + x,
@@ -326,9 +349,9 @@ proc circle*(x, y, radius: float, color: array[0..2, float32], filled: bool = tr
     )
   glEnd()
 
-proc radCircle*(x, y, radius: float, value: int, color: array[0..2, float32]) =
+proc radCircle*(x, y, radius: float, value: int, color: Rgb) =
   glBegin(GL_POLYGON)
-  glColor3f(color[0], color[1], color[2])
+  glColor3f(color.r, color.g, color.b)
   for i in 0..value:
     glVertex2f(
       cos(degToRad(i.float32)) * radius + x,
@@ -344,17 +367,17 @@ proc valueBar*(x1, y1, x2, y2, width, maxValue, value: float, vertical: bool = t
     x = value / maxValue
     barY = (y2 - y1) * x + y1
     barX = (x2 - x1) * x + x1
-    color = [(2.0 * (1 - x)).float32, (2.0 * x).float32, 0.float32]
+    color = newRgb(2 * (1 - x), 2 * x, 0)
 
-  line(x1, y1, x2, y2, width + 3.0, [0.float32, 0, 0])
+  line(x1, y1, x2, y2, width + 3.0, newRgb(0, 0, 0))
 
   if vertical:
     line(x1, y1, x2, barY, width, color)
   else:
     line(x1, y1, barX, y2, width, color)
 
-proc renderString*(x, y: float, text: string, color: array[0..2, float32], align: bool = false) =
-  glColor3f(color[0], color[1], color[2])
+proc renderString*(x, y: float, text: string, color: Rgb, align: bool = false) =
+  glColor3f(color.r, color.g, color.b)
 
   if align:
     glRasterPos2f(x - (glutBitmapLength(GLUT_BITMAP_HELVETICA_12, text).float / 2), y)
@@ -363,14 +386,3 @@ proc renderString*(x, y: float, text: string, color: array[0..2, float32], align
 
   for c in text:
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, ord(c))
-
-#[
-  misc
-]#
-
-proc color*(color: string): array[0..2, float32] =
-  try:
-    let c = parseColor(color).extractRGB()
-    [c.r.float32, c.g.float32, c.b.float32]
-  except:
-    [0.float32, 0, 0]

@@ -34,4 +34,4 @@ type
     hPos3D*, pos3D*: Vec3
     hPos2D*, pos2D*: Vec2
     health*, team*, id*, crossId*: int32
-    color*: array[0..2, float32]
+    color*: Rgb
